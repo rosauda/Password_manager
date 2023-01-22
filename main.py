@@ -1,29 +1,70 @@
 from tkinter import *
+import random
+from tkinter import messagebox
 
 # ---------------------------- CONSTANTS ------------------------------- #
 
-EMAIL = "example@gmail.com"
-
+EMAIL = "rodrigo.sauda@hotmail.com"
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
+
+
+def create_password():
+
+    letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u',
+               'v',
+               'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q',
+               'R',
+               'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+    numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+    symbols = ['!', '#', '$', '%', '&', '(', ')', '*', '+']
+
+    nr_letters = random.randint(8, 10)
+    nr_symbols = random.randint(2, 4)
+    nr_numbers = random.randint(2, 4)
+
+    password_list = [random.choice(letters) for char in range(nr_letters)]
+    password_list += [random.choice(symbols) for char in range(nr_symbols)]
+    password_list += [random.choice(numbers) for char in range(nr_numbers)]
+
+    random.shuffle(password_list)
+
+    password = ""
+    for char in password_list:
+        password += char
+
+    entry_password.delete(0, END)
+    entry_password.insert(0, string=password)
 
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 
 
 def saving_credentials():
-    with open("data.txt", "a") as data_password:
-        new_entry = f"{entry_website.get()} | {entry_credentials.get()} | {entry_password.get()} "
-        data_password.write(new_entry + '\n')
+    website_info = entry_website.get()
+    user_name_email = entry_credentials.get()
+    user_password = entry_password.get()
 
-        # Reset entries
-        entry_website.delete(0, END)
-        entry_password.delete(0, END)
-        if entry_credentials.get() == EMAIL:
-            pass
-        else:
-            entry_credentials.delete(0, END)
-            entry_credentials.insert(0, string=EMAIL)
+    if len(website_info) == 0 or len(user_name_email) == 0 or len(user_password) == 0:
+        messagebox.showinfo("Missing data", message="Please don`t leave any field empty")
+    else:
+        is_ok = messagebox.askokcancel(title=website_info, message=f"These are the details entered:"
+                                                                   f"\nEmail: {user_name_email}\n"
+                                                                   f"Password: {user_password} \nIs it ok "
+                                                                   f"to save?")
+        if is_ok:
+            with open("data.txt", "a") as data_password:
+                new_entry = f"{website_info} | {user_name_email} | {user_password} "
+                data_password.write(new_entry + '\n')
+
+                # Reset entries
+                entry_website.delete(0, END)
+                entry_password.delete(0, END)
+                if user_name_email == EMAIL:
+                    pass
+                else:
+                    entry_credentials.delete(0, END)
+                    entry_credentials.insert(0, string=EMAIL)
 
 
 # ---------------------------- UI SETUP ------------------------------- #
@@ -62,7 +103,7 @@ entry_password.grid(row=4, column=1, sticky='w')
 
 # Buttons
 generate_button = Button(text="Generate Password", fg="White", bg="#FF6E31",
-                         font=("Courier", 8, "bold"))  # command=button_clicked
+                         font=("Courier", 8, "bold"), command=create_password)
 generate_button.grid(row=4, column=1, sticky="e")
 
 add_button = Button(text="Save", fg="White", bg="#FF6E31", font=("Courier", 8, "bold"), command=saving_credentials)
