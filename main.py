@@ -2,12 +2,29 @@ from tkinter import *
 
 # ---------------------------- CONSTANTS ------------------------------- #
 
-EMAIL = "rodrigo.sauda@hotmail.com"
+EMAIL = "example@gmail.com"
 
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
+
 # ---------------------------- SAVE PASSWORD ------------------------------- #
+
+
+def saving_credentials():
+    with open("data.txt", "a") as data_password:
+        new_entry = f"{entry_website.get()} | {entry_credentials.get()} | {entry_password.get()} "
+        data_password.write(new_entry + '\n')
+
+        # Reset entries
+        entry_website.delete(0, END)
+        entry_password.delete(0, END)
+        if entry_credentials.get() == EMAIL:
+            pass
+        else:
+            entry_credentials.delete(0, END)
+            entry_credentials.insert(0, string=EMAIL)
+
 
 # ---------------------------- UI SETUP ------------------------------- #
 
@@ -38,7 +55,7 @@ entry_website.focus()
 
 entry_credentials = Entry(width=49, highlightthickness=1)
 entry_credentials.grid(row=3, column=1, sticky='w')
-entry_credentials.insert(END, string=EMAIL)
+entry_credentials.insert(0, string=EMAIL)
 
 entry_password = Entry(width=27, highlightthickness=1)
 entry_password.grid(row=4, column=1, sticky='w')
@@ -48,7 +65,7 @@ generate_button = Button(text="Generate Password", fg="White", bg="#FF6E31",
                          font=("Courier", 8, "bold"))  # command=button_clicked
 generate_button.grid(row=4, column=1, sticky="e")
 
-add_button = Button(text="Save", fg="White", bg="#FF6E31", font=("Courier", 8, "bold"))  # command=button_clicked
+add_button = Button(text="Save", fg="White", bg="#FF6E31", font=("Courier", 8, "bold"), command=saving_credentials)
 add_button.grid(row=5, column=1, sticky="w")
 add_button.config(padx=20, pady=1)
 
