@@ -1,5 +1,5 @@
 from tkinter import *
-import random
+from random import choice, randint, shuffle
 from tkinter import messagebox
 
 # ---------------------------- CONSTANTS ------------------------------- #
@@ -19,19 +19,12 @@ def create_password():
     numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
     symbols = ['!', '#', '$', '%', '&', '(', ')', '*', '+']
 
-    nr_letters = random.randint(8, 10)
-    nr_symbols = random.randint(2, 4)
-    nr_numbers = random.randint(2, 4)
+    password_list = [choice(letters) for char in range(randint(8, 10))]
+    password_list += [choice(symbols) for char in range(randint(2, 4))]
+    password_list += [choice(numbers) for char in range(randint(2, 4))]
 
-    password_list = [random.choice(letters) for char in range(nr_letters)]
-    password_list += [random.choice(symbols) for char in range(nr_symbols)]
-    password_list += [random.choice(numbers) for char in range(nr_numbers)]
-
-    random.shuffle(password_list)
-
-    password = ""
-    for char in password_list:
-        password += char
+    shuffle(password_list)
+    password = "".join(password_list)
 
     entry_password.delete(0, END)
     entry_password.insert(0, string=password)
