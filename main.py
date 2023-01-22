@@ -4,7 +4,7 @@ from tkinter import messagebox
 
 # ---------------------------- CONSTANTS ------------------------------- #
 
-EMAIL = "rodrigo.sauda@hotmail.com"
+EMAIL = "example@hotmail.com"
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
