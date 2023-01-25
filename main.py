@@ -73,6 +73,18 @@ def saving_credentials():
                 entry_credentials.insert(0, string=EMAIL)
 
 
+# ---------------------------- SEARCH PASSWORD ------------------------------- #
+
+
+
+
+
+
+
+
+
+
+
 # ---------------------------- UI SETUP ------------------------------- #
 
 # Generating window
@@ -96,7 +108,7 @@ password_label = Label(text="Password:", fg="White", bg="#243763", font=("Courie
 password_label.grid(row=4, column=0)
 
 # Entries
-entry_website = Entry(width=49, highlightthickness=1)
+entry_website = Entry(width=27, highlightthickness=1)
 entry_website.grid(row=2, column=1, sticky='w')
 entry_website.focus()
 
@@ -108,6 +120,11 @@ entry_password = Entry(width=27, highlightthickness=1)
 entry_password.grid(row=4, column=1, sticky='w')
 
 # Buttons
+generate_button = Button(text="Search", fg="White", bg="#FF6E31",
+                         font=("Courier", 8, "bold"), command=create_password)
+generate_button.config(padx=40, pady=1)
+generate_button.grid(row=2, column=1, sticky="e")
+
 generate_button = Button(text="Generate Password", fg="White", bg="#FF6E31",
                          font=("Courier", 8, "bold"), command=create_password)
 generate_button.grid(row=4, column=1, sticky="e")
