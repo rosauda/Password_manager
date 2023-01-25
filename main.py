@@ -53,17 +53,20 @@ def saving_credentials():
     else:
         try:
             with open("data.json", "r") as data_file:
+                # Reading old data
                 data = json.load(data_file)
         except FileNotFoundError:
             with open("data.json", "w") as data_file:
                 json.dump(new_data, data_file, indent=4)
         else:
+            # Updating old data with new data
             data.update(new_data)
 
             with open("data.json", "w") as data_file:
+                # Saving updated data
                 json.dump(data, data_file, indent=4)
         finally:
-            # Reset entries
+        # Reset entries
             entry_website.delete(0, END)
             entry_password.delete(0, END)
             if user_name_email == EMAIL:
@@ -72,18 +75,24 @@ def saving_credentials():
                 entry_credentials.delete(0, END)
                 entry_credentials.insert(0, string=EMAIL)
 
-
-# ---------------------------- SEARCH PASSWORD ------------------------------- #
-
+# ---------------------------- FIND PASSWORD ------------------------------- #
 
 
+def find_password():
 
-
-
-
-
-
-
+    website = entry_website.get()
+    try:
+        with open("data.json") as data_file:
+            data = json.load(data_file)
+    except FileNotFoundError:
+        messagebox.showinfo(title="Error", message="No Data File Found.")
+    else:
+        if website in data:
+            email = data[website]["email"]
+            password = data[website]["password"]
+            messagebox.showinfo(title=website, message=f"Email: {email}\nPassword: {password}")
+        else:
+            messagebox.showinfo(title="Error", message=f"No details for {website} exists.")
 
 # ---------------------------- UI SETUP ------------------------------- #
 
@@ -121,7 +130,7 @@ entry_password.grid(row=4, column=1, sticky='w')
 
 # Buttons
 generate_button = Button(text="Search", fg="White", bg="#FF6E31",
-                         font=("Courier", 8, "bold"), command=create_password)
+                         font=("Courier", 8, "bold"), command=find_password)
 generate_button.config(padx=40, pady=1)
 generate_button.grid(row=2, column=1, sticky="e")
 
