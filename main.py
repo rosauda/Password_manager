@@ -2,6 +2,8 @@ from tkinter import *
 from random import choice, randint, shuffle
 from tkinter import messagebox
 import pyperclip
+import json
+
 
 # ---------------------------- CONSTANTS ------------------------------- #
 
@@ -39,27 +41,36 @@ def saving_credentials():
     website_info = entry_website.get()
     user_name_email = entry_credentials.get()
     user_password = entry_password.get()
+    new_data = {
+        website_info: {
+            "email": user_name_email,
+            "password": user_password,
+        }
+    }
 
-    if len(website_info) == 0 or len(user_name_email) == 0 or len(user_password) == 0:
-        messagebox.showinfo("Missing data", message="Please don`t leave any field empty")
+    if len(website_info) == 0 or len(user_password) == 0:
+        messagebox.showinfo(title="Oops", message="Please make sure you haven't left any fields empty.")
     else:
-        is_ok = messagebox.askokcancel(title=website_info, message=f"These are the details entered:"
-                                                                   f"\nEmail: {user_name_email}\n"
-                                                                   f"Password: {user_password} \nIs it ok "
-                                                                   f"to save?")
-        if is_ok:
-            with open("data.txt", "a") as data_password:
-                new_entry = f"{website_info} | {user_name_email} | {user_password} "
-                data_password.write(new_entry + '\n')
+        try:
+            with open("data.json", "r") as data_file:
+                data = json.load(data_file)
+        except FileNotFoundError:
+            with open("data.json", "w") as data_file:
+                json.dump(new_data, data_file, indent=4)
+        else:
+            data.update(new_data)
 
-                # Reset entries
-                entry_website.delete(0, END)
-                entry_password.delete(0, END)
-                if user_name_email == EMAIL:
-                    pass
-                else:
-                    entry_credentials.delete(0, END)
-                    entry_credentials.insert(0, string=EMAIL)
+            with open("data.json", "w") as data_file:
+                json.dump(data, data_file, indent=4)
+        finally:
+            # Reset entries
+            entry_website.delete(0, END)
+            entry_password.delete(0, END)
+            if user_name_email == EMAIL:
+                pass
+            else:
+                entry_credentials.delete(0, END)
+                entry_credentials.insert(0, string=EMAIL)
 
 
 # ---------------------------- UI SETUP ------------------------------- #
